@@ -10,37 +10,15 @@ Android activity lifecycle observer
   <a href="https://github.com/nguyenhoangvannha/flutter_dart_packages/tree/main/android_activity_lifecycle/LICENSE"><img src="https://img.shields.io/github/license/nguyenhoangvannha/android_activity_lifecycle.svg" alt="license"></a>
 </p>
 
+##ONLY SUPPORT onStart, onPause, onStop, onResume
+
 Example:
 
 ```dart
 final _nAndroidLifecyclePlugin = AndroidActivityLifecycle();
 
-_nAndroidLifecyclePlugin.setMethodCallHandler((call) async {
-    String message = "Unknown";
-    bool result = true;
-    switch (call.method) {
-    case "onCreate":
-        message = ("dart ${call.method} ${call.arguments}");
-        break;
-    case "onStart":
-        message = ("dart ${call.method} ${call.arguments}");
-        break;
-    case "onResume":
-        message = ("dart ${call.method} ${call.arguments}");
-        break;
-    case "onPause":
-        message = ("dart ${call.method} ${call.arguments}");
-        break;
-    case "onStop":
-        message = ("dart ${call.method} ${call.arguments}");
-        break;
-    case "onDestroy":
-        message = ("dart ${call.method} ${call.arguments}");
-        break;
-    default:
-        result = false;
-    }
-    log(message);
-    return result;
+_nAndroidLifecyclePlugin.stateStream.listen((event) {
+  final message = "ActivityLifeCycleState = $event";
+  log(message);
 });
 ```

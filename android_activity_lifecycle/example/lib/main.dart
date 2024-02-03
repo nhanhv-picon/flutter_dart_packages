@@ -21,33 +21,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _nAndroidLifecyclePlugin.setMethodCallHandler((call) async {
-      String message = "Unknown";
-      bool result = true;
-      switch (call.method) {
-        case "onCreate":
-          message = ("dart ${call.method} ${call.arguments}");
-          break;
-        case "onStart":
-          message = ("dart ${call.method} ${call.arguments}");
-          break;
-        case "onResume":
-          message = ("dart ${call.method} ${call.arguments}");
-          break;
-        case "onPause":
-          message = ("dart ${call.method} ${call.arguments}");
-          break;
-        case "onStop":
-          message = ("dart ${call.method} ${call.arguments}");
-          break;
-        case "onDestroy":
-          message = ("dart ${call.method} ${call.arguments}");
-          break;
-        default:
-          result = false;
-      }
+    _nAndroidLifecyclePlugin.stateStream.listen((event) {
+      final message = "ActivityLifeCycleState = $event";
       log(message);
-      return result;
     });
   }
 
@@ -58,10 +34,17 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: const Center(
+        body: Center(
           child: Column(
             children: [
-              Text('Open logging for more information\n'),
+              StreamBuilder<ActivityLifeCycleStateEnum>(
+                stream: _nAndroidLifecyclePlugin.stateStream,
+                builder: (_, s) {
+                  final message = "ActivityLifeCycleState = ${s.data}";
+                  return Text(message);
+                },
+              ),
+              const Text('Open logging for more information\n'),
             ],
           ),
         ),

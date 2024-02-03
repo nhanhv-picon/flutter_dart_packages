@@ -1,17 +1,25 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
+import 'dart:async';
+
+import 'package:android_activity_lifecycle/src/messages/messages.g.dart';
 
 import 'android_activity_lifecycle_platform_interface.dart';
 
 /// An implementation of [AndroidActivityLifecyclePlatform] that uses method channels.
 class MethodChannelAndroidActivityLifecycle
     extends AndroidActivityLifecyclePlatform {
-  /// The method channel used to interact with the native platform.
-  @visibleForTesting
-  final methodChannel = const MethodChannel('android_activity_lifecycle');
+  final _stateStreamController =
+      StreamController<ActivityLifeCycleStateEnum>.broadcast();
+
+  MethodChannelAndroidActivityLifecycle() {
+    MessageFlutterApi.setup(this);
+  }
 
   @override
-  void setMethodCallHandler(Future Function(MethodCall call)? handler) {
-    methodChannel.setMethodCallHandler(handler);
+  void onActivityLifeCycleState(ActivityLifeCycleStateEnum state) {
+    _stateStreamController.sink.add(state);
   }
+
+  @override
+  Stream<ActivityLifeCycleStateEnum> get stateStream =>
+      _stateStreamController.stream;
 }

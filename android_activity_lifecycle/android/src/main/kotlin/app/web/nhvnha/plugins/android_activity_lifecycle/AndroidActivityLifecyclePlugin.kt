@@ -20,6 +20,7 @@ class AndroidActivityLifecyclePlugin: FlutterPlugin, ActivityAware {
 
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "android_activity_lifecycle")
+    activityLifeCycleObserver = ActivityLifecycleObserver(flutterPluginBinding)
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -28,7 +29,6 @@ class AndroidActivityLifecyclePlugin: FlutterPlugin, ActivityAware {
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     activityLifeCycle = FlutterLifecycleAdapter.getActivityLifecycle(binding)
-    activityLifeCycleObserver = ActivityLifecycleObserver(channel)
     activityLifeCycle.addObserver(activityLifeCycleObserver)
   }
 

@@ -1,38 +1,50 @@
 package app.web.nhvnha.plugins.android_activity_lifecycle.observer
 
+import ActivityLifeCycleStateEnum
+import MessageFlutterApi
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import io.flutter.plugin.common.MethodChannel
-import java.util.Date
+import io.flutter.embedding.engine.plugins.FlutterPlugin
 
-class ActivityLifecycleObserver(val methodChannel: MethodChannel) : DefaultLifecycleObserver {
+class ActivityLifecycleObserver(val flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) :
+    DefaultLifecycleObserver {
+    var flutterApi: MessageFlutterApi? = null
+
+    init {
+        flutterApi = MessageFlutterApi(flutterPluginBinding.getBinaryMessenger())
+    }
+
+    fun callFlutterMethodOnActivityLifeCycleState(state: ActivityLifeCycleStateEnum) {
+        flutterApi!!.onActivityLifeCycleState(state) {}
+    }
+
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
-        methodChannel.invokeMethod("onCreate", Date().toString())
+        callFlutterMethodOnActivityLifeCycleState(ActivityLifeCycleStateEnum.ONCREATE)
     }
 
     override fun onStart(owner: LifecycleOwner) {
         super.onStart(owner)
-        methodChannel.invokeMethod("onStart", Date().toString())
+        callFlutterMethodOnActivityLifeCycleState(ActivityLifeCycleStateEnum.ONSTART)
     }
 
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
-        methodChannel.invokeMethod("onResume", Date().toString())
+        callFlutterMethodOnActivityLifeCycleState(ActivityLifeCycleStateEnum.ONRESUME)
     }
 
     override fun onPause(owner: LifecycleOwner) {
         super.onPause(owner)
-        methodChannel.invokeMethod("onPause", Date().toString())
+        callFlutterMethodOnActivityLifeCycleState(ActivityLifeCycleStateEnum.ONPAUSE)
     }
 
     override fun onStop(owner: LifecycleOwner) {
         super.onStop(owner)
-        methodChannel.invokeMethod("onStop", Date().toString())
+        callFlutterMethodOnActivityLifeCycleState(ActivityLifeCycleStateEnum.ONSTOP)
     }
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
-        methodChannel.invokeMethod("onDestroy", Date().toString())
+        callFlutterMethodOnActivityLifeCycleState(ActivityLifeCycleStateEnum.ONDESTROY)
     }
 }

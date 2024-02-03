@@ -1,9 +1,11 @@
+import 'package:android_activity_lifecycle/src/messages/messages.g.dart';
 import 'package:flutter/services.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'android_activity_lifecycle_method_channel.dart';
 
-abstract class AndroidActivityLifecyclePlatform extends PlatformInterface {
+abstract class AndroidActivityLifecyclePlatform extends PlatformInterface
+    implements MessageFlutterApi {
   /// Constructs a AndroidActivityLifecyclePlatform.
   AndroidActivityLifecyclePlatform() : super(token: _token);
 
@@ -25,8 +27,5 @@ abstract class AndroidActivityLifecyclePlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  void setMethodCallHandler(
-      Future<dynamic> Function(MethodCall call)? handler) {
-    throw UnimplementedError('platformVersion() has not been implemented.');
-  }
+  Stream<ActivityLifeCycleStateEnum> get stateStream;
 }

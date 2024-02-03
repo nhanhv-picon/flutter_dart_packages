@@ -1,4 +1,3 @@
-import 'package:flutter/src/services/message_codec.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:android_activity_lifecycle/android_activity_lifecycle.dart';
 import 'package:android_activity_lifecycle/android_activity_lifecycle_platform_interface.dart';
@@ -9,12 +8,14 @@ class MockAndroidActivityLifecyclePlatform
     with MockPlatformInterfaceMixin
     implements AndroidActivityLifecyclePlatform {
   @override
-  Future<String?> getPlatformVersion() => Future.value('42');
+  void onActivityLifeCycleState(ActivityLifeCycleStateEnum state) {
+    // TODO: implement onActivityLifeCycleState
+  }
 
   @override
-  void setMethodCallHandler(Future Function(MethodCall call)? handler) {
-    // TODO: implement setMethodCallHandler
-  }
+  // TODO: implement stateStream
+  Stream<ActivityLifeCycleStateEnum> get stateStream =>
+      throw UnimplementedError();
 }
 
 void main() {

@@ -1,10 +1,9 @@
-import 'package:flutter/services.dart';
+import 'package:android_activity_lifecycle/src/messages/messages.g.dart';
 
 import 'android_activity_lifecycle_platform_interface.dart';
+export 'src/messages/messages.g.dart';
 
 class AndroidActivityLifecycle {
-  void setMethodCallHandler(
-      Future<dynamic> Function(MethodCall call)? handler) {
-    AndroidActivityLifecyclePlatform.instance.setMethodCallHandler(handler);
-  }
+  Stream<ActivityLifeCycleStateEnum> get stateStream =>
+      AndroidActivityLifecyclePlatform.instance.stateStream;
 }
