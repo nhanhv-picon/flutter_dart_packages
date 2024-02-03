@@ -1,8 +1,10 @@
+import 'package:flutter/services.dart';
 
 import 'android_activity_lifecycle_platform_interface.dart';
 
 class AndroidActivityLifecycle {
-  Future<String?> getPlatformVersion() {
-    return AndroidActivityLifecyclePlatform.instance.getPlatformVersion();
+  void setMethodCallHandler(
+      Future<dynamic> Function(MethodCall call)? handler) {
+    AndroidActivityLifecyclePlatform.instance.setMethodCallHandler(handler);
   }
 }

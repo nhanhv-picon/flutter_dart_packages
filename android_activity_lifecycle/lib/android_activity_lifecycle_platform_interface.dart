@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'android_activity_lifecycle_method_channel.dart';
@@ -8,7 +9,8 @@ abstract class AndroidActivityLifecyclePlatform extends PlatformInterface {
 
   static final Object _token = Object();
 
-  static AndroidActivityLifecyclePlatform _instance = MethodChannelAndroidActivityLifecycle();
+  static AndroidActivityLifecyclePlatform _instance =
+      MethodChannelAndroidActivityLifecycle();
 
   /// The default instance of [AndroidActivityLifecyclePlatform] to use.
   ///
@@ -23,7 +25,8 @@ abstract class AndroidActivityLifecyclePlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
+  void setMethodCallHandler(
+      Future<dynamic> Function(MethodCall call)? handler) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 }

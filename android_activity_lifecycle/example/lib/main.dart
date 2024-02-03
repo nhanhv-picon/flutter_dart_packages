@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'dart:async';
+import 'dart:developer';
 
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
+
 import 'package:android_activity_lifecycle/android_activity_lifecycle.dart';
 
 void main() {
@@ -16,34 +16,38 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  final _androidActivityLifecyclePlugin = AndroidActivityLifecycle();
+  final _nAndroidLifecyclePlugin = AndroidActivityLifecycle();
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    try {
-      platformVersion =
-          await _androidActivityLifecyclePlugin.getPlatformVersion() ?? 'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
+    _nAndroidLifecyclePlugin.setMethodCallHandler((call) async {
+      String message = "Unknown";
+      bool result = true;
+      switch (call.method) {
+        case "onCreate":
+          message = ("dart ${call.method} ${call.arguments}");
+          break;
+        case "onStart":
+          message = ("dart ${call.method} ${call.arguments}");
+          break;
+        case "onResume":
+          message = ("dart ${call.method} ${call.arguments}");
+          break;
+        case "onPause":
+          message = ("dart ${call.method} ${call.arguments}");
+          break;
+        case "onStop":
+          message = ("dart ${call.method} ${call.arguments}");
+          break;
+        case "onDestroy":
+          message = ("dart ${call.method} ${call.arguments}");
+          break;
+        default:
+          result = false;
+      }
+      log(message);
+      return result;
     });
   }
 
@@ -54,8 +58,12 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+        body: const Center(
+          child: Column(
+            children: [
+              Text('Open logging for more information\n'),
+            ],
+          ),
         ),
       ),
     );
