@@ -1,7 +1,8 @@
 name: android_activity_lifecycle
 description: "Android activity lifecycle observer"
 version: 0.0.1
-homepage:
+homepage: https://nhvnha.web.app
+repository: https://github.com/nguyenhoangvannha/flutter_dart_packages/tree/main/android_activity_lifecycle
 
 environment:
   sdk: '>=3.2.6 <4.0.0'
@@ -69,3 +70,7 @@ flutter:
   #
   # For details regarding fonts in packages, see
   # https://flutter.dev/custom-fonts/#from-packages
+
+topics:
+  - platform-channels
+  - plugin-development
