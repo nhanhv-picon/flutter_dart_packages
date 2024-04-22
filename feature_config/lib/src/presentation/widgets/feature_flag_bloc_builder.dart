@@ -10,13 +10,13 @@ class FeatureFlagBlocBuilder extends StatelessWidget {
   });
 
   final String featureKey;
-  final BlocWidgetBuilder<bool> builder;
+  final Widget Function(BuildContext context, bool isEnabled) builder;
 
   @override
   Widget build(BuildContext context) {
     return BlocSelector<FeatureConfigBloc, FeatureConfigState, bool>(
       selector: (state) {
-        return state.isEnable(featureKey);
+        return state.isEnabled(featureKey);
       },
       builder: builder,
     );
@@ -31,14 +31,14 @@ class MultiFeatureFlagBlocBuilder extends StatelessWidget {
   });
 
   final Set<String> featureKeySet;
-  final BlocWidgetBuilder<bool> builder;
+  final Widget Function(BuildContext context, bool isEnabled) builder;
 
   @override
   Widget build(BuildContext context) {
     return BlocSelector<FeatureConfigBloc, FeatureConfigState, bool>(
       selector: (state) {
         return !featureKeySet
-            .map((key) => state.isEnable(key))
+            .map((key) => state.isEnabled(key))
             .contains(false);
       },
       builder: builder,
