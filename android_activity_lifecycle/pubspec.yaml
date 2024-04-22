@@ -1,7 +1,7 @@
 name: android_activity_lifecycle
 description: "This flutter plugin for listen to FlutterActivity lifecycle state change on flutter Android app"
 version: 1.0.0
-homepage: https://nhvnha.web.app
+homepage: https://nguyenhoangvannha.github.io
 repository: https://github.com/nguyenhoangvannha/flutter_dart_packages/tree/main/android_activity_lifecycle
 
 environment:
