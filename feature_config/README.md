@@ -1,35 +1,76 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
-
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
 ## Features
 
 TODO: List what your package can do. Maybe include images, gifs, or videos.
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+1. Config firebase_remote_config in your flutter app project
+2. Add feature config key and value to firebase remote config
+3. Add feature_config package
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
 ```dart
-const like = 'sample';
+import 'package:feature_config/feature_config.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class Example extends StatefulWidget {
+  const Example({super.key});
+
+  @override
+  State<Example> createState() => _ExampleState();
+}
+
+class _ExampleState extends State<Example> {
+  final firebaseFeatureConfig = FirebaseFeatureConfig(
+    features: [
+      const Feature(key: 'CHAT_ENABLE_REACTION', isEnabled: true),
+    ],
+  );
+
+  @override
+  void initState() {
+    firebaseFeatureConfig.start();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        BlocProvider<FeatureConfigBloc>(
+          create: (context) => FeatureConfigBloc(
+            featureConfigs: firebaseFeatureConfig.featuresConfig,
+          ),
+          child: Builder(
+            builder: (context) {
+              return FeatureFlagBlocBuilder(
+                featureKey: 'CHAT_ENABLE_REACTION',
+                builder: (context, isEnabled) {
+                  return Text('CHAT_ENABLE_REACTION = $isEnabled');
+                },
+              );
+            },
+          ),
+        ),
+        FeatureConfigStreamBuilder(
+          featureKey: 'CHAT_ENABLE_REACTION',
+          stream: firebaseFeatureConfig.featuresConfig,
+          builder: (context, feature) {
+            return Text('CHAT_ENABLE_REACTION = ${feature.isEnabled}');
+          },
+        ),
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    firebaseFeatureConfig.close();
+    super.dispose();
+  }
+}
 ```
 
 ## Additional information

@@ -2,8 +2,8 @@ import 'package:feature_config/feature_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class FeatureConfigContainer extends StatelessWidget {
-  const FeatureConfigContainer({
+class FeatureFlagBlocBuilder extends StatelessWidget {
+  const FeatureFlagBlocBuilder({
     super.key,
     required this.featureKey,
     required this.builder,
@@ -23,8 +23,8 @@ class FeatureConfigContainer extends StatelessWidget {
   }
 }
 
-class MultiFeatureConfigContainer extends StatelessWidget {
-  const MultiFeatureConfigContainer({
+class MultiFeatureFlagBlocBuilder extends StatelessWidget {
+  const MultiFeatureFlagBlocBuilder({
     super.key,
     required this.featureKeySet,
     required this.builder,
