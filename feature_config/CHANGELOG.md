@@ -1,3 +1,8 @@
+## 0.0.4
+
+- FirebaseFeatureConfig add on error callback
+- FirebaseFeatureConfig expose getFeatureConfig func
+
 ## 0.0.3
 
 - Handle fetch firebase remote config error

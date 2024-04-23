@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:feature_config/business.dart';
@@ -98,7 +97,7 @@ class FirebaseFeatureConfig {
     await getFeatureConfig();
   }
 
-  Future<void> getFeatureConfig() async {
+  Future<IMap<String, Feature>> getFeatureConfig() async {
     try {
       ///1. Fetch the feature flag data from Firebase Remote Config server.
       await _remoteConfig.fetch();
@@ -124,6 +123,8 @@ class FirebaseFeatureConfig {
     } catch (e, s) {
       onError?.call(e, s);
     }
+
+    return _features;
   }
 
   bool isEnable(String featureFlagKey) {
