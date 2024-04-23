@@ -94,20 +94,23 @@ class FirebaseFeatureConfig {
     ///2. Store the fetched feature flag data to Firebase Remote Config local
     ///   cache.
     await _remoteConfig.fetchAndActivate();
-
-    await getFeatureFlag();
+    await _getFeatureConfig();
   }
 
-  Future<void> getFeatureFlag() async {
-    _features = _features.map((key, value) {
-      return MapEntry<String, Feature>(
-        key,
-        Feature(
-          key: key,
-          isEnabled: _remoteConfig.getBool(key),
-        ),
-      );
-    });
+  Future<void> _getFeatureConfig() async {
+    final remoteConfigKeys = _remoteConfig.getAll().keys;
+    _features = _features.map(
+      (key, feature) {
+        return MapEntry<String, Feature>(
+          key,
+          feature.copyWith(
+            isEnabled: remoteConfigKeys.contains(key)
+                ? _remoteConfig.getBool(key)
+                : feature.isEnabled,
+          ),
+        );
+      },
+    );
     _featuresStream.add(_features);
   }
 
