@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:feature_config/business.dart';
@@ -73,45 +74,53 @@ class FirebaseFeatureConfig {
 
     _remoteConfigUpdateSub = _remoteConfig.onConfigUpdated.listen(
       (event) async {
-        await _remoteConfig.fetch();
-        await _remoteConfig.fetchAndActivate();
-        final updatedFeatures = <String, Feature>{};
-        for (var key in event.updatedKeys) {
-          if (_features.keys.contains(key)) {
-            final featureFlagValue = _remoteConfig.getBool(key);
-            updatedFeatures[key] =
-                Feature(key: key, isEnabled: featureFlagValue);
+        try {
+          await _remoteConfig.fetch();
+          await _remoteConfig.fetchAndActivate();
+          final updatedFeatures = <String, Feature>{};
+          for (var key in event.updatedKeys) {
+            if (_features.keys.contains(key)) {
+              final featureFlagValue = _remoteConfig.getBool(key);
+              updatedFeatures[key] =
+                  Feature(key: key, isEnabled: featureFlagValue);
+            }
           }
+          _features = _features.addMap(updatedFeatures);
+          _featuresStream.add(_features);
+        } catch (e, s) {
+          log('feature_config onConfigUpdated error\n$e\n$s');
         }
-        _features = _features.addMap(updatedFeatures);
-        _featuresStream.add(_features);
       },
     );
-
-    ///1. Fetch the feature flag data from Firebase Remote Config server.
-    await _remoteConfig.fetch();
-
-    ///2. Store the fetched feature flag data to Firebase Remote Config local
-    ///   cache.
-    await _remoteConfig.fetchAndActivate();
     await _getFeatureConfig();
   }
 
   Future<void> _getFeatureConfig() async {
-    final remoteConfigKeys = _remoteConfig.getAll().keys;
-    _features = _features.map(
-      (key, feature) {
-        return MapEntry<String, Feature>(
-          key,
-          feature.copyWith(
-            isEnabled: remoteConfigKeys.contains(key)
-                ? _remoteConfig.getBool(key)
-                : feature.isEnabled,
-          ),
-        );
-      },
-    );
-    _featuresStream.add(_features);
+    try {
+      ///1. Fetch the feature flag data from Firebase Remote Config server.
+      await _remoteConfig.fetch();
+
+      ///2. Store the fetched feature flag data to Firebase Remote Config local
+      ///   cache.
+      await _remoteConfig.fetchAndActivate();
+
+      final remoteConfigKeys = _remoteConfig.getAll().keys;
+      _features = _features.map(
+        (key, feature) {
+          return MapEntry<String, Feature>(
+            key,
+            feature.copyWith(
+              isEnabled: remoteConfigKeys.contains(key)
+                  ? _remoteConfig.getBool(key)
+                  : feature.isEnabled,
+            ),
+          );
+        },
+      );
+      _featuresStream.add(_features);
+    } catch (e, s) {
+      log('feature_config _getFeatureConfig error\n$e\n$s');
+    }
   }
 
   bool isEnable(String featureFlagKey) {
