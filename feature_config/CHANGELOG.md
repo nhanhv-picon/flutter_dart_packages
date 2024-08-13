@@ -1,3 +1,12 @@
+## 0.0.5
+
+- upgrade firebase_remote_config to 5.0.4
+
+## 0.0.4
+
+- FirebaseFeatureConfig add on error callback
+- FirebaseFeatureConfig expose getFeatureConfig func
+
 ## 0.0.3
 
 - Handle fetch firebase remote config error

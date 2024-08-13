@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:feature_config/business.dart';
@@ -27,6 +26,7 @@ class FirebaseFeatureConfig {
     required List<Feature> features,
     Duration? fetchExpirationDuration,
     Duration? fetchMaximumInterval,
+    this.onError,
   }) {
     _features = features
         .asMap()
@@ -56,6 +56,8 @@ class FirebaseFeatureConfig {
   late FirebaseRemoteConfig _remoteConfig;
   late Duration _fetchExpirationDuration;
   late Duration _fetchMaximumInterval;
+
+  final void Function(Object error, StackTrace stackTrace)? onError;
 
   /// Initialize feature flag stream.
   ///
@@ -88,14 +90,14 @@ class FirebaseFeatureConfig {
           _features = _features.addMap(updatedFeatures);
           _featuresStream.add(_features);
         } catch (e, s) {
-          log('feature_config onConfigUpdated error\n$e\n$s');
+          onError?.call(e, s);
         }
       },
     );
-    await _getFeatureConfig();
+    await getFeatureConfig();
   }
 
-  Future<void> _getFeatureConfig() async {
+  Future<IMap<String, Feature>> getFeatureConfig() async {
     try {
       ///1. Fetch the feature flag data from Firebase Remote Config server.
       await _remoteConfig.fetch();
@@ -119,8 +121,10 @@ class FirebaseFeatureConfig {
       );
       _featuresStream.add(_features);
     } catch (e, s) {
-      log('feature_config _getFeatureConfig error\n$e\n$s');
+      onError?.call(e, s);
     }
+
+    return _features;
   }
 
   bool isEnable(String featureFlagKey) {
