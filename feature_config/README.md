@@ -23,7 +23,7 @@ class Example extends StatefulWidget {
 class _ExampleState extends State<Example> {
   final firebaseFeatureConfig = FirebaseFeatureConfig(
     features: [
-      const Feature(key: 'CHAT_ENABLE_REACTION', isEnabled: true),
+      const Feature(key: 'CHAT_ENABLE_REACTION', boolValue: true),
     ],
   );
 

@@ -9,6 +9,6 @@ class FeatureConfigState with _$FeatureConfigState {
 
 extension FeatureConfigStateExt on FeatureConfigState {
   bool isEnabled(String key) {
-    return features[key]?.isEnabled ?? false;
+    return features[key]?.boolValue ?? false;
   }
 }

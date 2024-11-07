@@ -1,3 +1,9 @@
+## 0.0.6
+
+- Add remote config string
+- Add MultiFeaturesBlocBuilder
+- Feature class: rename field isEnabled to boolValue
+
 ## 0.0.5
 
 - upgrade firebase_remote_config to 5.0.4

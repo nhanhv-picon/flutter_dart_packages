@@ -18,7 +18,9 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$SetFeatureConfigsFeatureConfigEvent {
   IMap<String, Feature> get features => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SetFeatureConfigsFeatureConfigEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SetFeatureConfigsFeatureConfigEventCopyWith<
           SetFeatureConfigsFeatureConfigEvent>
       get copyWith => throw _privateConstructorUsedError;
@@ -46,6 +48,8 @@ class _$SetFeatureConfigsFeatureConfigEventCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SetFeatureConfigsFeatureConfigEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -82,6 +86,8 @@ class __$$SetFeatureConfigsFeatureConfigEventImplCopyWithImpl<$Res>
       $Res Function(_$SetFeatureConfigsFeatureConfigEventImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SetFeatureConfigsFeatureConfigEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -122,7 +128,9 @@ class _$SetFeatureConfigsFeatureConfigEventImpl
   @override
   int get hashCode => Object.hash(runtimeType, features);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SetFeatureConfigsFeatureConfigEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SetFeatureConfigsFeatureConfigEventImplCopyWith<
@@ -139,8 +147,11 @@ abstract class _SetFeatureConfigsFeatureConfigEvent
 
   @override
   IMap<String, Feature> get features;
+
+  /// Create a copy of SetFeatureConfigsFeatureConfigEvent
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SetFeatureConfigsFeatureConfigEventImplCopyWith<
           _$SetFeatureConfigsFeatureConfigEventImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -150,7 +161,9 @@ abstract class _SetFeatureConfigsFeatureConfigEvent
 mixin _$FeatureConfigState {
   IMap<String, Feature> get features => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FeatureConfigState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FeatureConfigStateCopyWith<FeatureConfigState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -174,6 +187,8 @@ class _$FeatureConfigStateCopyWithImpl<$Res, $Val extends FeatureConfigState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FeatureConfigState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -207,6 +222,8 @@ class __$$FeatureConfigStateImplCopyWithImpl<$Res>
       $Res Function(_$FeatureConfigStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FeatureConfigState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -247,7 +264,9 @@ class _$FeatureConfigStateImpl implements _FeatureConfigState {
   @override
   int get hashCode => Object.hash(runtimeType, features);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FeatureConfigState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FeatureConfigStateImplCopyWith<_$FeatureConfigStateImpl> get copyWith =>
@@ -261,8 +280,11 @@ abstract class _FeatureConfigState implements FeatureConfigState {
 
   @override
   IMap<String, Feature> get features;
+
+  /// Create a copy of FeatureConfigState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FeatureConfigStateImplCopyWith<_$FeatureConfigStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
