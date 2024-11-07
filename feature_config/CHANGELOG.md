@@ -1,3 +1,6 @@
+## 0.0.7
+- Add missing feature.g.dart
+
 ## 0.0.6
 
 - Add remote config string
