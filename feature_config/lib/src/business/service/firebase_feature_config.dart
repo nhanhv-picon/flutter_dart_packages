@@ -82,9 +82,11 @@ class FirebaseFeatureConfig {
           final updatedFeatures = <String, Feature>{};
           for (var key in event.updatedKeys) {
             if (_features.keys.contains(key)) {
-              final featureFlagValue = _remoteConfig.getBool(key);
-              updatedFeatures[key] =
-                  Feature(key: key, isEnabled: featureFlagValue);
+              updatedFeatures[key] = Feature(
+                key: key,
+                boolValue: _remoteConfig.getBool(key),
+                stringValue: _remoteConfig.getString(key),
+              );
             }
           }
           _features = _features.addMap(updatedFeatures);
@@ -111,11 +113,12 @@ class FirebaseFeatureConfig {
         (key, feature) {
           return MapEntry<String, Feature>(
             key,
-            feature.copyWith(
-              isEnabled: remoteConfigKeys.contains(key)
-                  ? _remoteConfig.getBool(key)
-                  : feature.isEnabled,
-            ),
+            remoteConfigKeys.contains(key)
+                ? feature.copyWith(
+                    boolValue: _remoteConfig.getBool(key),
+                    stringValue: _remoteConfig.getString(key),
+                  )
+                : feature,
           );
         },
       );
@@ -128,7 +131,7 @@ class FirebaseFeatureConfig {
   }
 
   bool isEnable(String featureFlagKey) {
-    return _features[featureFlagKey]?.isEnabled ?? false;
+    return _features[featureFlagKey]?.boolValue ?? false;
   }
 
   void close() {

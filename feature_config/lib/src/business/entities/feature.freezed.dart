@@ -14,12 +14,25 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
+Feature _$FeatureFromJson(Map<String, dynamic> json) {
+  return _Feature.fromJson(json);
+}
+
 /// @nodoc
 mixin _$Feature {
+  @JsonKey(name: 'key')
   String get key => throw _privateConstructorUsedError;
-  bool get isEnabled => throw _privateConstructorUsedError;
+  @JsonKey(name: 'boolean')
+  bool get boolValue => throw _privateConstructorUsedError;
+  @JsonKey(name: 'string')
+  String get stringValue => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Serializes this Feature to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of Feature
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FeatureCopyWith<Feature> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -28,7 +41,10 @@ abstract class $FeatureCopyWith<$Res> {
   factory $FeatureCopyWith(Feature value, $Res Function(Feature) then) =
       _$FeatureCopyWithImpl<$Res, Feature>;
   @useResult
-  $Res call({String key, bool isEnabled});
+  $Res call(
+      {@JsonKey(name: 'key') String key,
+      @JsonKey(name: 'boolean') bool boolValue,
+      @JsonKey(name: 'string') String stringValue});
 }
 
 /// @nodoc
@@ -41,21 +57,28 @@ class _$FeatureCopyWithImpl<$Res, $Val extends Feature>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Feature
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? key = null,
-    Object? isEnabled = null,
+    Object? boolValue = null,
+    Object? stringValue = null,
   }) {
     return _then(_value.copyWith(
       key: null == key
           ? _value.key
           : key // ignore: cast_nullable_to_non_nullable
               as String,
-      isEnabled: null == isEnabled
-          ? _value.isEnabled
-          : isEnabled // ignore: cast_nullable_to_non_nullable
+      boolValue: null == boolValue
+          ? _value.boolValue
+          : boolValue // ignore: cast_nullable_to_non_nullable
               as bool,
+      stringValue: null == stringValue
+          ? _value.stringValue
+          : stringValue // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -67,7 +90,10 @@ abstract class _$$FeatureImplCopyWith<$Res> implements $FeatureCopyWith<$Res> {
       __$$FeatureImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String key, bool isEnabled});
+  $Res call(
+      {@JsonKey(name: 'key') String key,
+      @JsonKey(name: 'boolean') bool boolValue,
+      @JsonKey(name: 'string') String stringValue});
 }
 
 /// @nodoc
@@ -78,40 +104,56 @@ class __$$FeatureImplCopyWithImpl<$Res>
       _$FeatureImpl _value, $Res Function(_$FeatureImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Feature
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? key = null,
-    Object? isEnabled = null,
+    Object? boolValue = null,
+    Object? stringValue = null,
   }) {
     return _then(_$FeatureImpl(
       key: null == key
           ? _value.key
           : key // ignore: cast_nullable_to_non_nullable
               as String,
-      isEnabled: null == isEnabled
-          ? _value.isEnabled
-          : isEnabled // ignore: cast_nullable_to_non_nullable
+      boolValue: null == boolValue
+          ? _value.boolValue
+          : boolValue // ignore: cast_nullable_to_non_nullable
               as bool,
+      stringValue: null == stringValue
+          ? _value.stringValue
+          : stringValue // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$FeatureImpl implements _Feature {
-  const _$FeatureImpl({this.key = '', this.isEnabled = false});
+  const _$FeatureImpl(
+      {@JsonKey(name: 'key') this.key = '',
+      @JsonKey(name: 'boolean') this.boolValue = false,
+      @JsonKey(name: 'string') this.stringValue = ''});
+
+  factory _$FeatureImpl.fromJson(Map<String, dynamic> json) =>
+      _$$FeatureImplFromJson(json);
 
   @override
-  @JsonKey()
+  @JsonKey(name: 'key')
   final String key;
   @override
-  @JsonKey()
-  final bool isEnabled;
+  @JsonKey(name: 'boolean')
+  final bool boolValue;
+  @override
+  @JsonKey(name: 'string')
+  final String stringValue;
 
   @override
   String toString() {
-    return 'Feature(key: $key, isEnabled: $isEnabled)';
+    return 'Feature(key: $key, boolValue: $boolValue, stringValue: $stringValue)';
   }
 
   @override
@@ -120,30 +162,54 @@ class _$FeatureImpl implements _Feature {
         (other.runtimeType == runtimeType &&
             other is _$FeatureImpl &&
             (identical(other.key, key) || other.key == key) &&
-            (identical(other.isEnabled, isEnabled) ||
-                other.isEnabled == isEnabled));
+            (identical(other.boolValue, boolValue) ||
+                other.boolValue == boolValue) &&
+            (identical(other.stringValue, stringValue) ||
+                other.stringValue == stringValue));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, key, isEnabled);
+  int get hashCode => Object.hash(runtimeType, key, boolValue, stringValue);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Feature
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FeatureImplCopyWith<_$FeatureImpl> get copyWith =>
       __$$FeatureImplCopyWithImpl<_$FeatureImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$FeatureImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _Feature implements Feature {
-  const factory _Feature({final String key, final bool isEnabled}) =
-      _$FeatureImpl;
+  const factory _Feature(
+      {@JsonKey(name: 'key') final String key,
+      @JsonKey(name: 'boolean') final bool boolValue,
+      @JsonKey(name: 'string') final String stringValue}) = _$FeatureImpl;
+
+  factory _Feature.fromJson(Map<String, dynamic> json) = _$FeatureImpl.fromJson;
 
   @override
+  @JsonKey(name: 'key')
   String get key;
   @override
-  bool get isEnabled;
+  @JsonKey(name: 'boolean')
+  bool get boolValue;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(name: 'string')
+  String get stringValue;
+
+  /// Create a copy of Feature
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FeatureImplCopyWith<_$FeatureImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
