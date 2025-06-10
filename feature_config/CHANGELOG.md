@@ -1,3 +1,9 @@
+## 0.0.9
+- New func listenForConfigUpdates
+
+## 0.0.8
+- Optimize FirebaseFeatureConfig fetch call
+
 ## 0.0.7
 - Add missing feature.g.dart
 
