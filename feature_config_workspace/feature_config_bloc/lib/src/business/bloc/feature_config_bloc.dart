@@ -2,14 +2,12 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:feature_config/business.dart';
+import 'package:feature_config_bloc/business.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'feature_config_event.dart';
-
-part 'feature_config_state.dart';
-
 part 'feature_config_bloc.freezed.dart';
+part 'feature_config_event.dart';
+part 'feature_config_state.dart';
 
 class FeatureConfigBloc extends Bloc<FeatureConfigEvent, FeatureConfigState> {
   late StreamSubscription<IMap<String, Feature>> streamSubscription;

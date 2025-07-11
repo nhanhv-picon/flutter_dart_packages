@@ -1,3 +1,6 @@
+## 0.0.11
+- Split to feature_config_bloc
+
 ## 0.0.10
 - Revert 0.0.9 for fix black screen on app open
 
