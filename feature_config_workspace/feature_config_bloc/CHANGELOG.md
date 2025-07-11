@@ -1,3 +1,6 @@
+## 1.0.0
+- Support Riverpod
+
 ## 0.0.12
 - Fix import
 

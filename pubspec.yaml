@@ -1,0 +1,81 @@
+name: flutter_dart_packages
+publish_to: none
+environment:
+  sdk: ^3.6.0
+
+workspace:
+  - feature_config_workspace/feature_config
+  - feature_config_workspace/feature_config_bloc
+
+dev_dependencies:
+  melos: ^7.0.0-dev.9
+
+#dependency_overrides:
+#  riverpod: ^3.0.0-dev.16
+
+melos:
+  sdkPath: .fvm/flutter_sdk
+
+  packages:
+    - feature_config_workspace/**
+
+  scripts:
+    init:
+      description: init package
+      exec:
+        orderDependents: true
+        concurrency: 7
+      run: |
+        fluttergen
+        fvm dart run build_runner build --delete-conflicting-outputs
+    init-package:
+      description: init package
+      exec: |
+        fvm dart pub get
+        fluttergen
+        fvm dart run build_runner build --delete-conflicting-outputs
+      packageFilters:
+        scope: "*"
+    clean:
+      exec: fvm flutter clean
+    inst:
+      exec: fvm dart pub add dev:build_runner
+    format:
+      exec: fvm dart format .
+    build-runner:
+      exec: fvm dart run build_runner build --delete-conflicting-outputs
+      select-package:
+        depends-on: build_runner
+      packageFilters:
+        scope: "*"
+    build-runner-watch:
+      exec: fvm dart run build_runner watch --delete-conflicting-outputs
+      select-package:
+        depends-on: build_runner
+      packageFilters:
+        scope: "*"
+    gen-assets:
+      exec: fluttergen
+      packageFilters:
+        scope: "*"
+    check-unused-files:
+      exec: metrics check-unused-files lib
+      packageFilters:
+        scope: "*"
+    check-unused-l10n:
+      exec: metrics check-unused-l10n lib
+      packageFilters:
+        scope: "*"
+    check-unused-code:
+      exec: metrics check-unused-code lib
+      packageFilters:
+        scope: "*"
+    analyze:
+      exec: fvm flutter analyze
+      packageFilters:
+        scope: "*"
+    analyze-package:
+      exec: fvm flutter analyze
+      select-package:
+      packageFilters:
+        scope: "*"
