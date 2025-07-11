@@ -1,3 +1,5 @@
+## 0.0.12
+- Fix import
 ## 0.0.11
 - Split to feature_config_bloc
 
