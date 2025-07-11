@@ -1,3 +1,6 @@
+## 0.0.10
+- Revert 0.0.9 for fix black screen on app open
+
 ## 0.0.9
 - New func listenForConfigUpdates
 
