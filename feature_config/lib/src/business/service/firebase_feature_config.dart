@@ -14,28 +14,28 @@ class FirebaseFeatureConfig {
   ///
   /// Set the default values of feature flags to [features].
   ///
-  /// Set the [fetchTimeout] to specify the custom expiration
+  /// Set the [fetchExpirationDuration] to specify the custom expiration
   /// duration time for any fetch from the Firebase Remote Config server.
   /// Server fetch will only be done when the previous fetch is already
   /// expired. Default expiration duration is 1 minute.
   ///
-  /// Set the [minimumFetchInterval] to specify the maximum age
+  /// Set the [fetchMaximumInterval] to specify the maximum age
   /// of a cached config before it is considered stale.
   /// Defaults to five hours.
   FirebaseFeatureConfig({
     required List<Feature> features,
-    Duration? fetchTimeout,
-    Duration? minimumFetchInterval,
+    Duration? fetchExpirationDuration,
+    Duration? fetchMaximumInterval,
     this.onError,
   }) {
     _features = features
         .asMap()
-        .map((_, feature) => MapEntry(feature.key, feature))
+        .map((key, value) => MapEntry(value.key, value))
         .toIMap();
-    _featuresController.add(_features);
-
-    _fetchTimeout = fetchTimeout ?? const Duration(minutes: 1);
-    _minimumFetchInterval = minimumFetchInterval ?? const Duration(hours: 5);
+    _featuresStream.add(_features);
+    _fetchExpirationDuration =
+        fetchExpirationDuration ?? const Duration(minutes: 1);
+    _fetchMaximumInterval = fetchMaximumInterval ?? const Duration(hours: 5);
   }
 
   /// The status flag of available features.
@@ -45,18 +45,17 @@ class FirebaseFeatureConfig {
   /// Default values will be used when the app launches for the first time so
   /// that there is no feature flag data yet on Firebase Remote Config's local
   /// cache.
-  final _featuresController =
-      StreamController<IMap<String, Feature>>.broadcast();
+  final _featuresStream = StreamController<IMap<String, Feature>>();
   late IMap<String, Feature> _features;
 
-  IMap<String, Feature> get features => _features;
-
   Stream<IMap<String, Feature>> get featuresConfig =>
-      _featuresController.stream;
+      _featuresStream.stream.asBroadcastStream();
 
-  late final FirebaseRemoteConfig _remoteConfig;
-  late final Duration _fetchTimeout;
-  late final Duration _minimumFetchInterval;
+  late StreamSubscription<RemoteConfigUpdate> _remoteConfigUpdateSub;
+
+  late FirebaseRemoteConfig _remoteConfig;
+  late Duration _fetchExpirationDuration;
+  late Duration _fetchMaximumInterval;
 
   final void Function(Object error, StackTrace stackTrace)? onError;
 
@@ -67,98 +66,76 @@ class FirebaseFeatureConfig {
   /// Then it will fetch the feature status configuration from Firebase
   /// Remote Config server and store the latest config to the local cache and
   /// to the stream.
-  StreamSubscription<RemoteConfigUpdate>? _remoteConfigUpdateSub;
-
   Future<void> start() async {
-    try {
-      _remoteConfig = FirebaseRemoteConfig.instance;
+    _remoteConfig = FirebaseRemoteConfig.instance;
 
-      await _remoteConfig.setConfigSettings(RemoteConfigSettings(
-        minimumFetchInterval: _minimumFetchInterval,
-        fetchTimeout: _fetchTimeout,
-      ));
+    await _remoteConfig.setConfigSettings(RemoteConfigSettings(
+      minimumFetchInterval: _fetchMaximumInterval,
+      fetchTimeout: _fetchExpirationDuration,
+    ));
 
-      // Initial fetch
-      await fetchAndUpdate();
-
-      // Real-time updates
-      listenForConfigUpdates();
-
-      // Activate real-time updates
-      await _remoteConfig.activate();
-    } catch (e, s) {
-      onError?.call(e, s);
-    }
-  }
-
-  void stopListeningForConfigUpdates() {
-    _remoteConfigUpdateSub?.cancel();
-    _remoteConfigUpdateSub = null;
-  }
-
-  void listenForConfigUpdates() {
-    try {
-      stopListeningForConfigUpdates();
-
-      _remoteConfigUpdateSub = _remoteConfig.onConfigUpdated.listen(
-        (RemoteConfigUpdate update) async {
-          try {
-            await _remoteConfig.activate();
-            final updated = <String, Feature>{};
-            for (final key in update.updatedKeys) {
-              if (_features.containsKey(key)) {
-                updated[key] = Feature(
-                  key: key,
-                  boolValue: _remoteConfig.getBool(key),
-                  stringValue: _remoteConfig.getString(key),
-                );
-              }
+    _remoteConfigUpdateSub = _remoteConfig.onConfigUpdated.listen(
+      (event) async {
+        try {
+          await _remoteConfig.fetch();
+          await _remoteConfig.fetchAndActivate();
+          final updatedFeatures = <String, Feature>{};
+          for (var key in event.updatedKeys) {
+            if (_features.keys.contains(key)) {
+              updatedFeatures[key] = Feature(
+                key: key,
+                boolValue: _remoteConfig.getBool(key),
+                stringValue: _remoteConfig.getString(key),
+              );
             }
-            if (updated.isNotEmpty) {
-              _features = _features.addMap(updated);
-              _featuresController.add(_features);
-            }
-          } catch (e, s) {
-            onError?.call(e, s);
           }
-        },
-        onError: (Object e, StackTrace s) {
+          _features = _features.addMap(updatedFeatures);
+          _featuresStream.add(_features);
+        } catch (e, s) {
           onError?.call(e, s);
-        },
-      );
-    } catch (e, s) {
-      onError?.call(e, s);
-    }
+        }
+      },
+    );
+    await getFeatureConfig();
   }
 
-  Future<IMap<String, Feature>> fetchAndUpdate() async {
+  Future<IMap<String, Feature>> getFeatureConfig() async {
     try {
+      ///1. Fetch the feature flag data from Firebase Remote Config server.
+      await _remoteConfig.fetch();
+
+      ///2. Store the fetched feature flag data to Firebase Remote Config local
+      ///   cache.
       await _remoteConfig.fetchAndActivate();
 
-      final updated = _features.map((key, feature) {
-        return MapEntry(
-          key,
-          _remoteConfig.getAll().containsKey(key)
-              ? feature.copyWith(
-                  boolValue: _remoteConfig.getBool(key),
-                  stringValue: _remoteConfig.getString(key),
-                )
-              : feature,
-        );
-      });
-
-      _features = updated;
-      _featuresController.add(_features);
+      final remoteConfigKeys = _remoteConfig.getAll().keys;
+      _features = _features.map(
+        (key, feature) {
+          return MapEntry<String, Feature>(
+            key,
+            remoteConfigKeys.contains(key)
+                ? feature.copyWith(
+                    boolValue: _remoteConfig.getBool(key),
+                    stringValue: _remoteConfig.getString(key),
+                  )
+                : feature,
+          );
+        },
+      );
+      _featuresStream.add(_features);
     } catch (e, s) {
       onError?.call(e, s);
     }
+
     return _features;
   }
 
-  bool isEnable(String key) => _features[key]?.boolValue ?? false;
+  bool isEnable(String featureFlagKey) {
+    return _features[featureFlagKey]?.boolValue ?? false;
+  }
 
   void close() {
-    stopListeningForConfigUpdates();
-    _featuresController.close();
+    _remoteConfigUpdateSub.cancel();
+    _featuresStream.close();
   }
 }
