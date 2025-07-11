@@ -77,7 +77,6 @@ class FirebaseFeatureConfig {
     _remoteConfigUpdateSub = _remoteConfig.onConfigUpdated.listen(
       (event) async {
         try {
-          await _remoteConfig.fetch();
           await _remoteConfig.fetchAndActivate();
           final updatedFeatures = <String, Feature>{};
           for (var key in event.updatedKeys) {
@@ -102,8 +101,6 @@ class FirebaseFeatureConfig {
   Future<IMap<String, Feature>> getFeatureConfig() async {
     try {
       ///1. Fetch the feature flag data from Firebase Remote Config server.
-      await _remoteConfig.fetch();
-
       ///2. Store the fetched feature flag data to Firebase Remote Config local
       ///   cache.
       await _remoteConfig.fetchAndActivate();

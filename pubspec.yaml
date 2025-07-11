@@ -6,6 +6,7 @@ environment:
 workspace:
   - feature_config_workspace/feature_config
   - feature_config_workspace/feature_config_bloc
+  - feature_config_workspace/feature_config_riverpod
 
 dev_dependencies:
   melos: ^7.0.0-dev.9
@@ -77,5 +78,13 @@ melos:
     analyze-package:
       exec: fvm flutter analyze
       select-package:
+      packageFilters:
+        scope: "*"
+    pub-verify:
+      exec: dart pub publish --dry-run
+      packageFilters:
+        scope: "*"
+    pub-publish:
+      exec: dart pub publish
       packageFilters:
         scope: "*"

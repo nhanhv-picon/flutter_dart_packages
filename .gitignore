@@ -59,7 +59,4 @@ app.*.map.json
 # FVM Version Cache
 .fvm/
 
-*.g.dart
-*.freezed.dart
-
 pubspec_overrides.yaml
