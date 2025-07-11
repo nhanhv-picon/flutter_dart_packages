@@ -1,6 +1,6 @@
 name: feature_config_bloc
 description: "Feature flag and feature config"
-version: 0.0.11
+version: 0.0.12
 homepage: https://nguyenhoangvannha.github.io
 repository: https://github.com/nguyenhoangvannha/flutter_dart_packages/tree/main/feature_config
 
