@@ -1,6 +1,6 @@
-name: feature_config
+name: feature_config_bloc
 description: "Feature flag and feature config"
-version: 0.0.10
+version: 0.0.11
 homepage: https://nguyenhoangvannha.github.io
 repository: https://github.com/nguyenhoangvannha/flutter_dart_packages/tree/main/feature_config
 
@@ -16,6 +16,7 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.1.6
   freezed_annotation: ^2.4.4
+  feature_config: ^0.0.11
 
 dev_dependencies:
   flutter_test:
