@@ -1,29 +1,31 @@
 name: feature_config
 description: "Feature flag and feature config"
-version: 0.0.12
+version: 1.0.0
 homepage: https://nguyenhoangvannha.github.io
 repository: https://github.com/nguyenhoangvannha/flutter_dart_packages/tree/main/feature_config
 
+resolution: workspace
+
 environment:
-  sdk: '>=3.3.3 <4.0.0'
+  sdk: '>=3.6.0'
   flutter: ">=1.17.0"
 
 dependencies:
-  fast_immutable_collections: ^10.2.4
-  firebase_remote_config: ^5.4.4
+  fast_immutable_collections: ^11.0.4
+  firebase_remote_config: ^5.4.7
   flutter:
     sdk: flutter
-  freezed_annotation: ^2.4.4
+  freezed_annotation: ^3.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
-  build_runner: ^2.4.12
-  freezed: ^2.5.7
-  json_serializable: ^6.8.0
-  flutter_gen_runner: ^5.6.0
-  source_gen: ^1.5.0
+  flutter_lints: ^5.0.0
+  build_runner: ^2.5.4
+  freezed: ^3.1.0
+  json_serializable: ^6.9.5
+  flutter_gen_runner: ^5.10.0
+  source_gen: ^2.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
